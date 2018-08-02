@@ -1,9 +1,16 @@
-resource "null_resource" "apply_manifests" {
+// objects created from Kubernetes manifests.
+resource "null_resource" "objects" {
   provisioner "local-exec" {
     command = "kubectl --kubeconfig=${local_file.kubeconfig.filename} apply -f ${var.manifest_dir}"
   }
+
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "kubectl --kubeconfig=${local_file.kubeconfig.filename} delete -f ${var.manifest_dir}"
+  }
 }
 
+// kubeconfig generated using credentials provided to module.
 resource "local_file" "kubeconfig" {
   filename = "${var.render_dir}/kubeconfig"
 
