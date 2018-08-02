@@ -9,8 +9,8 @@ provider "google" {
 
 // huv_cluster is GKE cluster for use with Help Users Vote.
 resource "google_container_cluster" "huv_cluster" {
-  name   = "${var.cluster_name}"
-  zone   = "${var.cluster_zone}"
+  name = "${var.cluster_name}"
+  zone = "${var.cluster_zone}"
 
   initial_node_count = 1
 
@@ -34,13 +34,12 @@ module "kubernetes" {
   source = "./kubernetes"
 
   manifest_dir = "./manifests"
-  render_dir = "${var.render_dir}"
+  render_dir   = "${var.render_dir}"
 
-  server = "https://${google_container_cluster.huv_cluster.endpoint}"
-  username = "${google_container_cluster.huv_cluster.master_auth.0.username}"
-  password = "${google_container_cluster.huv_cluster.master_auth.0.password}"
+  server             = "https://${google_container_cluster.huv_cluster.endpoint}"
+  username           = "${google_container_cluster.huv_cluster.master_auth.0.username}"
+  password           = "${google_container_cluster.huv_cluster.master_auth.0.password}"
   client_certificate = "${google_container_cluster.huv_cluster.master_auth.0.client_certificate}"
-  client_key = "${google_container_cluster.huv_cluster.master_auth.0.client_key}"
-  ca_certificate = "${google_container_cluster.huv_cluster.master_auth.0.cluster_ca_certificate}"
+  client_key         = "${google_container_cluster.huv_cluster.master_auth.0.client_key}"
+  ca_certificate     = "${google_container_cluster.huv_cluster.master_auth.0.cluster_ca_certificate}"
 }
-
