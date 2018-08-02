@@ -33,7 +33,7 @@ resource "google_container_cluster" "huv_cluster" {
 module "kubernetes" {
   source = "./kubernetes"
 
-  manifest_dir = "./manifests"
+  manifest_dir = "${path.module}/manifests"
   render_dir   = "${var.render_dir}"
 
   server             = "https://${google_container_cluster.huv_cluster.endpoint}"
