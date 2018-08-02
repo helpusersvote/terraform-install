@@ -1,29 +1,33 @@
-resource "template_dir" "huv_manifests" {
-  source_dir = "${var.manifest_dir}"
-  destination_dir = "${var.render_dir}"
+resource "null_resource" "apply_manifests" {
+  provisioner "local-exec" {
+    command = "kubectl --kubeconfig=${local_file.kubeconfig.filename} apply -f ${var.manifest_dir}"
+  }
 }
 
+resource "local_file" "kubeconfig" {
+  filename = "${var.render_dir}/kubeconfig"
 
-data "external" "manifest_files" {
-  program = [
-    "/bin/bash", 
-    "-c",
-    <<EOF
-# Start JSON Object
-printf "{" >> test
-
-# Add entries
-for f in `find ${template_dir.huv_manifests.destination_dir} -maxdepth 1 -type f`; do
-  if [ -v started ]; then
-    printf ',' >>test
-  fi
-  printf '"%q": "' $f >> test
-  kubectl convert 
-  started=true
-done
-
-printf '}' >> test
+  content = <<EOF
+apiVersion: v1
+kind: Config
+clusters:
+- name: huv-cluster
+  cluster:
+    api-version: v1
+    server: "${var.server}"
+    certificate-authority-data: "${var.ca_certificate}"
+users:
+- name: huv-admin
+  user:
+    username: "${var.username}"
+    password: "${var.password}"
+    client-certificate-data: "${var.client_certificate}"
+    client-key-data: "${var.client_key}"
+contexts:
+- name: huv
+  context:
+    cluster: huv-cluster
+    user: huv-admin
+current-context: huv
 EOF
-  ]
 }
-

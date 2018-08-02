@@ -39,8 +39,8 @@ module "kubernetes" {
   server = "https://${google_container_cluster.huv_cluster.endpoint}"
   username = "${google_container_cluster.huv_cluster.master_auth.0.username}"
   password = "${google_container_cluster.huv_cluster.master_auth.0.password}"
-  client_certificate = "${base64decode(google_container_cluster.huv_cluster.master_auth.0.client_certificate)}"
-  client_key = "${base64decode(google_container_cluster.huv_cluster.master_auth.0.client_key)}"
-  ca_certificate = "${base64decode(google_container_cluster.huv_cluster.master_auth.0.cluster_ca_certificate)}"
+  client_certificate = "${google_container_cluster.huv_cluster.master_auth.0.client_certificate}"
+  client_key = "${google_container_cluster.huv_cluster.master_auth.0.client_key}"
+  ca_certificate = "${google_container_cluster.huv_cluster.master_auth.0.cluster_ca_certificate}"
 }
 

@@ -27,19 +27,19 @@ variable "password" {
 }
 
 variable "client_certificate" {
-  description = "Plain text encoded x509 Client certificate to authenticate with Kubernetes API server."
+  description = "Base64 encoded x509 Client certificate to authenticate with Kubernetes API server."
   type = "string"
   default = ""
 }
 
 variable "client_key" {
-  description = "Plain text encoded x509 Client key to authenticate with Kubernetes API server."
+  description = "Base64 encoded x509 Client key to authenticate with Kubernetes API server."
   type = "string"
   default = ""
 }
 
 variable "ca_certificate" {
-  description = "Plain text encoded x509 Certifiate Authority certificate to authenticate with Kubernetes API server."
+  description = "Base64 encoded x509 Certifiate Authority certificate to authenticate with Kubernetes API server."
   type = "string"
   default = ""
 }
