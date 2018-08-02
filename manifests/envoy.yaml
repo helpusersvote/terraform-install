@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    funk-component: ingress
+  name: funk-ingress
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      funk-component: ingress
+  template:
+    metadata:
+      labels:
+        funk-component: ingress
+      name: ingress
+    spec:
+      containers:
+        - name: envoy
+          image: envoyproxy/envoy-alpine:299591bdcf43a51d2b7ef92ce004343a4bfc620f
+          command:
+            - "/usr/local/bin/envoy"
+          args:
+            - "--config-path /etc/envoy/envoy.yaml"
+            - "--mode serve"
+            - "--v2-config-only"
+            - "--service-cluster ingress"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8001
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/envoy
+          livenessProbe:
+            httpGet:
+              path: /server_info
+              port: 8001
+          readinessProbe:
+            httpGet:
+              path: /server_info
+              port: 8001
+        - name: statsd
+          image: prom/statsd-exporter:master
+          command:
+            - "/bin/statsd_exporter"
+          args:
+            - "-statsd.mapping-config=/etc/statsd/statsd.yaml"
+          ports:
+            - containerPort: 9102
+              protocol: TCP
+              name: metrics
+          volumeMounts:
+            - name: statsd
+              mountPath: /etc/statsd
+      volumes:
+        - name: config
+          configMap:
+            name: funk-ingress
+        - name: statsd
+          configMap:
+            name: funk-statsd

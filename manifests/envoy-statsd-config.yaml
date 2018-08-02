@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: funk-statsd
+data:
+  statsd.yaml: |-
+    ---
+    # see https://lyft.github.io/envoy/docs/configuration/cluster_manager/cluster_stats.html#config-cluster-manager-cluster-stats
+    defaults:
+      timer_type: histogram
+    mappings:
+    ### BEGIN General
+    - match: envoy.cluster.*.upstream_cx_total
+      name: envoy_upstream_cx_total
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.upstream_cx_active
+      name: envoy_upstream_cx_active
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.upstream_connect_fail
+      name: envoy_upstream_connect_fail
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.membership_healthy
+      name: envoy_membership_healthy
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.membership_change
+      name: envoy_membership_change
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.membership_total
+      name: envoy_membership_total
+      labels:
+        cluster: "$1"
+    ### END General
+    ### BEGIN Health check statistics
+    - match: envoy.cluster.*.health_check.attempt
+      name: envoy_health_check_attempt
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.health_check.success
+      name: envoy_health_check_success
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.health_check.failure
+      name: envoy_health_check_failure
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.health_check.passive_failure
+      name: envoy_health_check_passive_failure
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.health_check.network_failure
+      name: envoy_health_check_network_failure
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.health_check.verify_cluster
+      name: envoy_health_check_verify_cluster
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.health_check.healthy
+      name: envoy_health_check_healthy
+      labels:
+        cluster: "$1"
+    ### END Health check statistics
+    ### BEGIN Dynamic HTTP statistics
+    - match: envoy.cluster.*.upstream_rq_time
+      name: envoy_upstream_rq_time
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.canary.upstream_rq_time
+      name: envoy_canary_upstream_rq_time
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.internal.upstream_rq_time
+      name: envoy_canary_internal_upstream_rq_time
+      labels:
+        cluster: "$1"
+    - match: envoy.cluster.*.external.upstream_rq_time
+      name: envoy_external_upstream_rq_time
+      labels:
+        cluster: "$1"
+    ### END Dynamic HTTP statistics
+    ### BEGIN listener
+    - match: envoy.listener.*.downstream_cx_length_ms
+      name: envoy_listener_downstream_cx_length_ms
+      labels:
+        listener: $1
+    - match: envoy.listener.*.downstream_cx_active
+      name: envoy_listener_downstream_cx_active
+      labels:
+        listener: $1
+    - match: envoy.listener.*.downstream_cx_proxy_proto_error
+      name: envoy_listener_downstream_cx_proxy_proto_error
+      labels:
+        listener: $1
+    - match: envoy.listener.*.downstream_cx_destroy
+      name: envoy_listener_downstream_cx_destroy
+      labels:
+        listener: $1
+    - match: envoy.listener.*.downstream_cx_total
+      name: envoy_listener_downstream_cx_total
+      labels:
+        listener: $1
+    - match: envoy.listener.*.*.*.*.downstream_cx_length_ms
+      name: envoy_listener_downstream_cx_length_ms
+      labels:
+        listener: "$1.$2.$3.$4"
+    - match: envoy.listener.*.*.*.*.downstream_cx_active
+      name: envoy_listener_downstream_cx_active
+      labels:
+        listener: "$1.$2.$3.$4"
+    - match: envoy.listener.*.*.*.*.downstream_cx_proxy_proto_error
+      name: envoy_listener_downstream_cx_proxy_proto_error
+      labels:
+        listener: "$1.$2.$3.$4"
+    - match: envoy.listener.*.*.*.*.downstream_cx_destroy
+      name: envoy_listener_downstream_cx_destroy
+      labels:
+        listener: "$1.$2.$3.$4"
+    - match: envoy.listener.*.*.*.*.downstream_cx_total
+      name: envoy_listener_downstream_cx_total
+      labels:
+        listener: "$1.$2.$3.$4"
+    ### END listener

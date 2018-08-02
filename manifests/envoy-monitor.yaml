@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: envoy
+  labels:
+    funk-component: ingress
+spec:
+  selector:
+    matchLabels:
+      funk-component: ingress
+  endpoints:
+  - port: statsd
