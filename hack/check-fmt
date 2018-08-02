@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Checks if hclfmt needs to be applied to Terraform documents.
+
+cmd="hclfmt"
+
+function main() {
+	PATH="${PATH}:${GOPATH}/bin"
+	hash ${cmd} 2>&- || { echo >&2 "${cmd} not in PATH."; exit 2; }
+
+	local badFiles=()
+	for f in `git diff --cached --name-only --diff-filter=ACM | grep '\.tf$'`; do
+		git cat-file -p :${f} | ${cmd} | diff -u <(git cat-file -p :${f}) - >/dev/null
+		if [ $? -ne 0 ]; then
+			badFiles+=(${f})
+		fi
+	done
+
+	if [ ${#badFiles} -ne 0 ]; then
+		echo "Format these files with \"${cmd}\" before committing:"
+		printf '%s\n' "${badFiles[@]}"
+		exit 1
+	fi
+}
+
+main "$@"
