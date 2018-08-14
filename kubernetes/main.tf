@@ -5,8 +5,9 @@ resource "null_resource" "objects" {
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
-    command = "kubectl --kubeconfig=${local_file.kubeconfig.filename} delete -f ${var.manifest_dir}"
+    when       = "destroy"
+    on_failure = "continue"
+    command    = "kubectl --kubeconfig=${local_file.kubeconfig.filename} delete -f ${var.manifest_dir}"
   }
 }
 
