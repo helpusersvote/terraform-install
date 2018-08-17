@@ -4,4 +4,5 @@ metadata:
   name: "secret-store"
 spec:
   nodes: 2
-  version: "0.9.1-0"
+  version: "0.10.4-0"
+  baseImage: "vault"
