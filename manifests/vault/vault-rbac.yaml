@@ -42,6 +42,33 @@ rules:
   verbs:
   - "*"
 ---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: vault-psp-role
+rules:
+- apiGroups:
+  - extensions
+  resourceNames:
+  - vault-psp
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: vault-psp-rolebinding
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: default
+roleRef:
+  kind: Role
+  name: vault-psp-role
+  apiGroup: rbac.authorization.k8s.io
+---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
