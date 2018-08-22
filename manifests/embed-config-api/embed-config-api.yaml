@@ -1,0 +1,37 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    heritage: huv
+    app: embed-config-api
+  name: embed-config-api
+spec:
+  selector:
+    matchLabels:
+      app: embed-config-api 
+  template:
+    metadata:
+      labels:
+        app: embed-config-api
+      name: embed-config-api
+    spec:
+      containers:
+        - name: embed-config
+          image: usermirror/config-api
+          env:
+            - name: CONFIG_API_STORAGE_BACKEND
+              value: etcd
+            - name: CONFIG_API_ETCD_ADDR
+              value: embed-config-etcd-cluster-client:2379
+          ports:
+            - name: embed-config
+              containerPort: 8888
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /internal/health
+              port: 8888
+          readinessProbe:
+            httpGet:
+              path: /internal/health
+              port: 8888
