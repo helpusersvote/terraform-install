@@ -1,10 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: secret-store-psp
+  name: vault-psp
 spec:
   privileged: false  # Prevents creation of privileged Pods
-  defaultAddCapabilities:
+  allowedCapabilities:
     - IPC_LOCK
   seLinux:
     rule: RunAsAny
