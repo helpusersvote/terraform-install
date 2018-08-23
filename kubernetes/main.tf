@@ -1,13 +1,13 @@
 // objects created from Kubernetes manifests.
 resource "null_resource" "objects" {
   provisioner "local-exec" {
-    command = "kubectl --kubeconfig=${local_file.kubeconfig.filename} apply -f ${var.manifest_dir}"
+    command = "kubectl --kubeconfig=${local_file.kubeconfig.filename} apply --recursive -f ${var.manifest_dir}"
   }
 
   provisioner "local-exec" {
     when       = "destroy"
     on_failure = "continue"
-    command    = "kubectl --kubeconfig=${local_file.kubeconfig.filename} delete -f ${var.manifest_dir}"
+    command    = "kubectl --kubeconfig=${local_file.kubeconfig.filename} delete --recursive -f ${var.manifest_dir}"
   }
 }
 
