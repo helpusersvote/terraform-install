@@ -1,0 +1,31 @@
+language: go
+go:
+- "1.10.x"
+env:
+  global:
+  - TERRAFORM_VERSION=0.11.8
+  - KUBECTL_VERSION=v1.11.2
+  # Key for Gcloud Service account (decrypted in before_install)
+  - TF_VAR_gcloud_creds=./google-account.json
+
+before_install:
+- curl -L https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip | funzip >terraform
+- curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl >kubectl
+- sudo install ./kubectl ./terraform /usr/local/bin
+- openssl aes-256-cbc -K ${encrypted_5d2b0dc7b104_key} -iv ${encrypted_5d2b0dc7b104_iv} -in ./test/usermirror-ci-key -out ./google-account.json -d
+
+install:
+- terraform init
+
+before_script:
+- terraform plan
+
+# retry applying manifests to allow CRD creation
+script:
+- terraform apply -auto-approve || true
+- sleep 10
+- terraform apply -auto-approve
+
+
+after_script:
+- terraform destroy -auto-approve
