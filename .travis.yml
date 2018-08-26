@@ -23,7 +23,7 @@ before_script:
 # retry applying manifests to allow CRD creation
 script:
 - terraform apply -auto-approve || true
-- sleep 10
+- sleep 20
 - terraform apply -auto-approve
 
 
