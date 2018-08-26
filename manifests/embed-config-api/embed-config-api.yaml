@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: embed-config
-          image: usermirror/config-api
+          image: usermirror/config-api:19Az7VsZ0jpMhsAqpesLxk0z88f
           env:
             - name: CONFIG_API_STORAGE_BACKEND
               value: etcd
