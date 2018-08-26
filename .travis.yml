@@ -20,12 +20,8 @@ install:
 before_script:
 - terraform plan
 
-# retry applying manifests to allow CRD creation
 script:
-- terraform apply -auto-approve || true
-- sleep 20
 - terraform apply -auto-approve
-
 
 after_script:
 - terraform destroy -auto-approve
