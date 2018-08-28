@@ -48,7 +48,7 @@ resource "google_container_cluster" "huv_cluster" {
 
 // kubernetes allows syncing manifests to the Kubernetes API server.
 module "kubernetes" {
-  source = "./kubernetes"
+  source = "./modules/kubernetes"
 
   manifest_dir = "${path.module}/manifests"
   render_dir   = "${var.render_dir}"
