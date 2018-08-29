@@ -43,7 +43,7 @@ function delete_manifests() {
 # Retries the given command RETRIES times with an exponentially increasing sleep starting with WAIT.
 function retry() {
 	local retries=${RETRIES-4}
-	local timeout=${WAIT-1}
+	local timeout=${WAIT-2}
 	local statusCode=0
 
 	while [[ $retries > 0 ]]; do

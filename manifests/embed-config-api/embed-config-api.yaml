@@ -17,12 +17,12 @@ spec:
     spec:
       containers:
         - name: embed-config
-          image: usermirror/config-api:19Az7VsZ0jpMhsAqpesLxk0z88f
+          image: quay.io/usermirror/config-api:19SByGr8Q9TbqBQSxJ4BkR1Ndh8
           env:
             - name: CONFIG_API_STORAGE_BACKEND
               value: postgres
             - name: CONFIG_API_POSTGRES_ADDR
-              value: postgres://huv_user:changeme@localhost:5432/postgres?sslmode=disable
+              value: postgres://huv_user:changeme@localhost:3306/huv-db?sslmode=disable
           ports:
             - name: embed-config
               containerPort: 8888

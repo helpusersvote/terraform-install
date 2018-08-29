@@ -28,10 +28,15 @@ resource "google_sql_database_instance" "master" {
   }
 }
 
-resource "google_sql_user" "users" {
+resource "google_sql_user" "config-api" {
   name     = "huv_user"
   instance = "${google_sql_database_instance.master.name}"
   password = "${var.db_user_password}"
+}
+
+resource "google_sql_database" "config-api" {
+  name     = "huv-db"
+  instance = "${google_sql_database_instance.master.name}"
 }
 
 // kubeconfig generated using credentials provided to module.
