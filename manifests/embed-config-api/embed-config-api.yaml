@@ -20,9 +20,9 @@ spec:
           image: usermirror/config-api:19Az7VsZ0jpMhsAqpesLxk0z88f
           env:
             - name: CONFIG_API_STORAGE_BACKEND
-              value: etcd
-            - name: CONFIG_API_ETCD_ADDR
-              value: embed-config-etcd-cluster-client:2379
+              value: postgres
+            - name: CONFIG_API_POSTGRES_ADDR
+              value: postgres://huv_user:changeme@localhost:5432/postgres?sslmode=disable
           ports:
             - name: embed-config
               containerPort: 8888
@@ -35,3 +35,25 @@ spec:
             httpGet:
               path: /internal/health
               port: 8888
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          command: ["/cloud_sql_proxy",
+                    "-instances=$(INSTANCE_CONNECTION_NAME)=tcp:3306",
+                    "-credential_file=/secrets/cloudsql/credentials.json"]
+          env:
+          - name: INSTANCE_CONNECTION_NAME
+            valueFrom:
+              secretKeyRef:
+                name: sql-access
+                key: instance-connection-name
+          securityContext:
+            runAsUser: 2  # non-root user
+            allowPrivilegeEscalation: false
+          volumeMounts:
+          - name: sql-access-credentials
+            mountPath: /secrets/cloudsql
+            readOnly: true
+      volumes:
+      - name: sql-access-credentials
+        secret:
+          secretName: sql-access

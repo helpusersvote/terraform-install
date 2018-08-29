@@ -37,3 +37,15 @@ variable "cluster_password" {
   description = "Password to connect to Kubernetes API Server (must be at least 16 char)"
   type        = "string"
 }
+
+variable "sql_service_account_id" {
+  description = "ID of the Google Cloud Service Account used to access SQL database instances."
+  type        = "string"
+  default     = "huv-sql-access"
+}
+
+variable "sql_db_password" {
+  description = "Password for the SQL user used to perform writes."
+  type        = "string"
+  default     = "changeme"
+}
