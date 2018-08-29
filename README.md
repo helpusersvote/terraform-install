@@ -8,8 +8,11 @@ Currently, only Google Kubernetes Engine (GKE) is supported but other providers 
 - Configure Terraform for Google Cloud Provider using [these](https://www.terraform.io/docs/providers/google/index.html) instructions. This should look like this if using fixed credentials:
 **main.tf**
 ```hcl
-provider "google" {
-  credentials = "${file("MyGcloudProject-a1234567abcd.json")}"
+module "huv-cluster" {
+  source = "github.com/helpusersvote/terraform-kubernetes-helpusersvote"
+  gcloud_creds = "${file("project-hash-qk9304fwe0.json")}"
+  
+  // other variables
 }
 ```
 - Follow generic instructions to complete.
