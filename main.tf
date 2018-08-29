@@ -60,3 +60,12 @@ module "kubernetes" {
   client_key         = "${google_container_cluster.huv_cluster.master_auth.0.client_key}"
   ca_certificate     = "${google_container_cluster.huv_cluster.master_auth.0.cluster_ca_certificate}"
 }
+
+// cloud_sql provides persistence backed by PostreSQL on Google Cloud.
+module "cloud_sql" {
+  source = "./modules/cloud_sql"
+
+  manifest_dir              = "${path.module}/manifests"
+  access_service_account_id = "${var.sql_service_account_id}"
+  db_user_password          = "${var.sql_db_password}"
+}
