@@ -2,9 +2,26 @@
 //
 // Credentials can be downloaded at https://console.cloud.google.com/apis/credentials/serviceaccountkey.
 provider "google" {
+  version = "~> 1.17"
+
   credentials = "${var.gcloud_creds}"
   project     = "${var.cluster_project}"
   region      = "${var.cluster_zone}"
+}
+
+// local provider writes and reads files from disk
+provider "local" {
+  version = "~> 1.1"
+}
+
+// null provider allows abitrary operations (mostly for using kubectl)
+provider "null" {
+  version = "~> 1.0"
+}
+
+// random provider creates randomized values for use in ID creation and testing.
+provider "random" {
+  version = "~> 2.0"
 }
 
 // huv_cluster is GKE cluster for use with Help Users Vote.
