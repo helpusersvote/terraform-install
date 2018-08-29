@@ -5,6 +5,7 @@ resource "null_resource" "objects" {
 
     environment {
       KUBECONFIG = "${local_file.kubeconfig.filename}"
+      LAST       = "${var.last_resource}"
     }
   }
 

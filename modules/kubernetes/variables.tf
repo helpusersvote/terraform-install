@@ -43,3 +43,9 @@ variable "ca_certificate" {
   type        = "string"
   default     = ""
 }
+
+variable "last_resource" {
+  description = "Used to created dependency on previous step"
+  type        = "string"
+  default     = ""
+}
