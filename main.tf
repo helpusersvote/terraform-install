@@ -59,6 +59,8 @@ module "kubernetes" {
   client_certificate = "${google_container_cluster.huv_cluster.master_auth.0.client_certificate}"
   client_key         = "${google_container_cluster.huv_cluster.master_auth.0.client_key}"
   ca_certificate     = "${google_container_cluster.huv_cluster.master_auth.0.cluster_ca_certificate}"
+
+  last_resource = "${module.cloud_sql.last_resource}"
 }
 
 // cloud_sql provides persistence backed by PostreSQL on Google Cloud.
