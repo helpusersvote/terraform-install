@@ -24,6 +24,11 @@ provider "random" {
   version = "~> 2.0"
 }
 
+// template manifests before creation within the cluster.
+provider "template" {
+  version = "~> 1.0"
+}
+
 // external allows custom commands to be run to examine manifest and cluster state.
 provider "external" {
   version = "~> 1.0"
@@ -51,12 +56,29 @@ resource "google_container_cluster" "huv_cluster" {
   }
 }
 
+// ConfigMap describing deployment configuration
+data "external" "manifest_dirs" {
+  program = ["${path.module}/scripts/configmap.sh", "${path.module}/manifests/config.yaml"]
+}
+
+// Kubernetes manifests are templated for options specific to this HUV deployment
+resource "template_dir" "kube_manifests" {
+  count = "${length(data.external.manifest_dirs.result)}"
+
+  source_dir      = "${path.module}/manifests/${element(keys(data.external.manifest_dirs.result), count.index)}"
+  destination_dir = "${var.render_dir}/manifests"
+
+  vars {
+    sql_db_password = "${var.sql_db_password}"
+  }
+}
+
 // kubernetes allows syncing manifests to the Kubernetes API server.
 module "kubernetes" {
   source = "./modules/kubernetes"
 
-  manifest_dir = "${path.module}/manifests"
-  render_dir   = "${var.render_dir}"
+  manifest_dir = "${var.render_dir}/manifests"
+  render_dir   = "${template_dir.kube_manifests.0.destination_dir}"
 
   server             = "https://${google_container_cluster.huv_cluster.endpoint}"
   username           = "${google_container_cluster.huv_cluster.master_auth.0.username}"
@@ -72,7 +94,7 @@ module "kubernetes" {
 module "cloud_sql" {
   source = "./modules/cloud_sql"
 
-  manifest_dir              = "${path.module}/manifests"
+  manifest_dir              = "${var.render_dir}/manifests"
   access_service_account_id = "${var.sql_service_account_id}"
   db_user_password          = "${var.sql_db_password}"
 }
