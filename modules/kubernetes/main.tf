@@ -1,14 +1,7 @@
-// get ConfigMap describing Kubernetes deployment configuration
-data "external" "config" {
-  program = ["${path.module}/scripts/configmap.sh", "${var.manifest_dir}/config.yaml"]
-}
-
 // objects created from Kubernetes manifests.
 resource "null_resource" "objects" {
-  count = "${length(data.external.config.result)}"
-
   provisioner "local-exec" {
-    command = "${path.module}/scripts/manifests.sh create ${var.manifest_dir}/${element(keys(data.external.config.result), count.index)}"
+    command = "${path.module}/scripts/manifests.sh create ${var.manifest_dir}"
 
     environment {
       KUBECONFIG = "${local_file.kubeconfig.filename}"
