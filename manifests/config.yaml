@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deploy-config
+data:
+  embed-config-api: ""
+  prometheus: ""
