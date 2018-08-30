@@ -24,6 +24,11 @@ provider "random" {
   version = "~> 2.0"
 }
 
+// external allows custom commands to be run to examine manifest and cluster state.
+provider "external" {
+  version = "~> 1.0"
+}
+
 // huv_cluster is GKE cluster for use with Help Users Vote.
 resource "google_container_cluster" "huv_cluster" {
   name = "${var.cluster_name}"
