@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: go-router
-          image: usermirror/go-router
+          image: helpusersvote/go-router
           env:
             - name: CONFIG_API_HOST
               value: http://embed-config-api
