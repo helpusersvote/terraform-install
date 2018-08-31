@@ -49,3 +49,9 @@ variable "sql_db_password" {
   type        = "string"
   default     = "changeme"
 }
+
+variable "components" {
+  description = "List of components to be deployed"
+  type        = "list"
+  default     = ["prometheus", "embed-config-api"]
+}

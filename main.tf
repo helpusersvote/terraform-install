@@ -57,20 +57,24 @@ resource "google_container_cluster" "huv_cluster" {
 }
 
 // ConfigMap describing deployment configuration
-data "external" "manifest_dirs" {
-  program = ["${path.module}/scripts/configmap.sh", "${path.module}/manifests/config.yaml"]
+data "external" "config" {
+  count = "${length(var.components)}"
+
+  program = [
+    "${path.module}/scripts/configmap.sh",
+    "${path.module}/manifests/config.yaml",
+    "${element(var.components, count.index)}",
+  ]
 }
 
 // Kubernetes manifests are templated for options specific to this HUV deployment
 resource "template_dir" "kube_manifests" {
-  count = "${length(data.external.manifest_dirs.result)}"
+  count = "${length(var.components)}"
 
-  source_dir      = "${path.module}/manifests/${element(keys(data.external.manifest_dirs.result), count.index)}"
+  source_dir      = "${path.module}/manifests/${element(var.components, count.index)}"
   destination_dir = "${var.render_dir}/manifests"
 
-  vars {
-    sql_db_password = "${var.sql_db_password}"
-  }
+  vars = "${data.external.config.*.result[count.index]}"
 }
 
 // kubernetes allows syncing manifests to the Kubernetes API server.
@@ -78,7 +82,7 @@ module "kubernetes" {
   source = "./modules/kubernetes"
 
   manifest_dir = "${var.render_dir}/manifests"
-  render_dir   = "${template_dir.kube_manifests.0.destination_dir}"
+  render_dir   = "${var.render_dir}/generated"
 
   server             = "https://${google_container_cluster.huv_cluster.endpoint}"
   username           = "${google_container_cluster.huv_cluster.master_auth.0.username}"
