@@ -4,6 +4,5 @@ metadata:
   name: deploy-config
 data:
   embed-config-api: |
-    sql_server_addr: "http://google.com:8989/po?useNotEvil"
-    racingMode: "False"
+    sql_db_password: "changeme"
   prometheus: ""
