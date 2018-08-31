@@ -16,8 +16,8 @@ spec:
       name: embed-config-api
     spec:
       containers:
-        - name: embed-config
-          image: quay.io/usermirror/config-api:19SByGr8Q9TbqBQSxJ4BkR1Ndh8
+        - name: config-api
+          image: usermirror/config-api:latest
           env:
             - name: CONFIG_API_STORAGE_BACKEND
               value: postgres
