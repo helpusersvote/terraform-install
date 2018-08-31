@@ -30,7 +30,7 @@ function print_configmap() {
 function print_first_configmap() {
 	local filename=${1}
 
-	${KCONVERT} -f ${filename} -o go-template='{{range $lk, $lv := .items}}{{range $k, $v := $lv.data}},"{{js $k}}":"{{js $v}}"{{end}}{{end}}'
+	${KCONVERT} -f ${filename} -o go-template='{{range $flk, $flv := .items}}{{range $lk, $lv := $flv.items}}{{range $k, $v := $lv.data}},"{{js $k}}":"{{js $v}}"{{end}}{{end}}{{end}}'
 }
 
 # Convert YAML formatted ConfigMap Value to temporary string:string ConfigMap for given file and key.
