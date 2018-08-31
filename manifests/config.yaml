@@ -3,5 +3,7 @@ kind: ConfigMap
 metadata:
   name: deploy-config
 data:
-  embed-config-api: ""
+  embed-config-api: |
+    sql_server_addr: "http://google.com:8989/po?useNotEvil"
+    racingMode: "False"
   prometheus: ""
