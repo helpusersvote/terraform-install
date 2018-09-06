@@ -24,16 +24,6 @@ provider "random" {
   version = "~> 2.0"
 }
 
-// template manifests before creation within the cluster.
-provider "template" {
-  version = "~> 1.0"
-}
-
-// external allows custom commands to be run to examine manifest and cluster state.
-provider "external" {
-  version = "~> 1.0"
-}
-
 // huv_cluster is GKE cluster for use with Help Users Vote.
 resource "google_container_cluster" "huv_cluster" {
   name = "${var.cluster_name}"
@@ -56,25 +46,14 @@ resource "google_container_cluster" "huv_cluster" {
   }
 }
 
-// ConfigMap describing deployment configuration
-data "external" "config" {
-  count = "${length(var.components)}"
-
-  program = [
-    "${path.module}/scripts/configmap.sh",
-    "${path.module}/manifests/config.yaml",
-    "${element(var.components, count.index)}",
-  ]
-}
-
 // Kubernetes manifests are templated for options specific to this HUV deployment
-resource "template_dir" "kube_manifests" {
-  count = "${length(var.components)}"
+module "config" {
+  source = "./modules/config"
 
-  source_dir      = "${path.module}/manifests/${element(var.components, count.index)}"
-  destination_dir = "${var.render_dir}/manifests"
-
-  vars = "${data.external.config.*.result[count.index]}"
+  components   = "${var.components}"
+  config       = "${path.module}/manifests/config.yaml"
+  manifest_dir = "${path.module}/manifests"
+  render_dir   = "${var.render_dir}"
 }
 
 // kubernetes allows syncing manifests to the Kubernetes API server.
