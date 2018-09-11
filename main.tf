@@ -63,7 +63,7 @@ module "kubernetes" {
   manifest_dirs = "${module.config.dirs}"
   kubeconfig    = "${module.kubeconfig.path}"
 
-  last_resource = "${module.cloud_sql.last_resource}"
+  last_resource = "${module.cloudsql_db.sql_access_key}"
 }
 
 // generate kubeconfig to authenticate with Kubernete API server
@@ -80,11 +80,29 @@ module "kubeconfig" {
   ca_certificate     = "${google_container_cluster.huv_cluster.master_auth.0.cluster_ca_certificate}"
 }
 
-// cloud_sql provides persistence backed by PostreSQL on Google Cloud.
-module "cloud_sql" {
-  source = "./modules/cloud_sql"
+resource "random_string" "sql_instance_id" {
+  length  = 5
+  upper   = false
+  special = false
+}
 
-  manifest_dir              = "${var.render_dir}/manifests/embed-config-api"
-  access_service_account_id = "${var.sql_service_account_id}"
-  db_user_password          = "${var.sql_db_password}"
+// cloudsql creates a PostreSQL instance on Google Cloud.
+module "cloudsql" {
+  source = "./modules/cloudsql"
+
+  client_service_account = "${var.sql_service_account_id}"
+  db_instance            = "helpusersvote-${random_string.sql_instance_id.result}"
+}
+
+// cloudsql_db creates a user, database, and access credentials on a PostgreSQL instance.
+module "cloudsql_db" {
+  source = "./modules/cloudsql_db"
+
+  render_dir                   = "${var.render_dir}/manifests/embed-config-api"
+  client_service_account_email = "${module.cloudsql.sql_service_account_email}"
+  connection_name              = "${module.cloudsql.connection_name}"
+  instance                     = "${module.cloudsql.instance_id}"
+  db_user                      = "huv_user"
+  db_user_password             = "${var.sql_db_password}"
+  db_name                      = "huv_db"
 }
