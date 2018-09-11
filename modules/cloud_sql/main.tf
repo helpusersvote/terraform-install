@@ -1,6 +1,29 @@
+// Enable necessary APIs
+resource "google_project_service" "cloud_sql" {
+  service            = "sql-component.googleapis.com"
+  disable_on_destroy = "false"
+}
+
+resource "google_project_service" "cloud_sql_admin" {
+  service            = "sqladmin.googleapis.com"
+  disable_on_destroy = "false"
+}
+
+resource "google_project_service" "iam" {
+  service            = "iam.googleapis.com"
+  disable_on_destroy = "false"
+}
+
+resource "google_project_service" "resourcemanager" {
+  service            = "cloudresourcemanager.googleapis.com"
+  disable_on_destroy = "false"
+}
+
 resource "google_service_account" "sql_access" {
   account_id   = "${var.access_service_account_id}"
   display_name = "Allows access to Help Users Vote SQL"
+
+  depends_on = ["google_project_service.iam"]
 }
 
 resource "google_service_account_key" "sql_access" {
@@ -10,6 +33,8 @@ resource "google_service_account_key" "sql_access" {
 resource "google_project_iam_member" "sql_access_rights" {
   role   = "roles/cloudsql.client"
   member = "serviceAccount:${google_service_account.sql_access.email}"
+
+  depends_on = ["google_project_service.resourcemanager"]
 }
 
 resource "random_string" "sql_instance_id" {
@@ -26,6 +51,11 @@ resource "google_sql_database_instance" "master" {
   settings {
     tier = "db-f1-micro"
   }
+
+  depends_on = [
+    "google_project_service.cloud_sql",
+    "google_project_service.cloud_sql_admin",
+  ]
 }
 
 resource "google_sql_user" "config-api" {
