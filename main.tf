@@ -53,15 +53,15 @@ module "config" {
   components   = "${var.components}"
   config       = "${path.module}/manifests/config.yaml"
   manifest_dir = "${path.module}/manifests"
-  render_dir   = "${var.render_dir}"
+  render_dir   = "${var.render_dir}/manifests"
 }
 
 // kubernetes allows syncing manifests to the Kubernetes API server.
 module "kubernetes" {
   source = "./modules/kubernetes"
 
-  manifest_dir = "${var.render_dir}/manifests"
-  kubeconfig   = "${module.kubeconfig.path}"
+  manifest_dirs = "${module.config.dirs}"
+  kubeconfig    = "${module.kubeconfig.path}"
 
   last_resource = "${module.cloud_sql.last_resource}"
 }
@@ -84,7 +84,7 @@ module "kubeconfig" {
 module "cloud_sql" {
   source = "./modules/cloud_sql"
 
-  manifest_dir              = "${var.render_dir}/manifests"
+  manifest_dir              = "${var.render_dir}/manifests/embed-config-api"
   access_service_account_id = "${var.sql_service_account_id}"
   db_user_password          = "${var.sql_db_password}"
 }

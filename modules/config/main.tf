@@ -24,7 +24,7 @@ resource "template_dir" "kube_manifests" {
   count = "${length(var.components)}"
 
   source_dir      = "${var.manifest_dir}/${element(var.components, count.index)}"
-  destination_dir = "${var.render_dir}/manifests"
+  destination_dir = "${var.render_dir}/${element(var.components, count.index)}"
 
   vars = "${data.external.config.*.result[count.index]}"
 }

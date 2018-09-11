@@ -1,6 +1,6 @@
-variable "manifest_dir" {
-  description = "Path to a directory containing manifests to be applied to the cluster"
-  type        = "string"
+variable "manifest_dirs" {
+  description = "Paths of directories containing manifests to be applied to the cluster"
+  type        = "list"
 }
 
 variable "kubeconfig" {
