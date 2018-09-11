@@ -3,6 +3,3 @@ kind: ConfigMap
 metadata:
   name: deploy-config
 data:
-  embed-config-api: |
-    sql_db_password: "changeme"
-  prometheus: ""

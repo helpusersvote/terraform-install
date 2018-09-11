@@ -1,8 +1,6 @@
 // kubeconfig generated using credentials provided to module.
-resource "local_file" "kubeconfig" {
-  filename = "${var.render_dir}/kubeconfig"
-
-  content = <<EOF
+locals {
+  kubeconfig = <<EOF
 apiVersion: v1
 kind: Config
 clusters:
@@ -25,4 +23,11 @@ contexts:
     user: huv-admin
 current-context: huv
 EOF
+}
+
+// write kubeconfig to disk if render_dir is provided
+resource "local_file" "kubeconfig" {
+  filename = "${var.render_dir}/kubeconfig"
+
+  content = "${local.kubeconfig}"
 }

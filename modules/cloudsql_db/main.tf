@@ -11,8 +11,6 @@ resource "google_sql_user" "config-api" {
 resource "google_sql_database" "config-api" {
   name     = "${var.db_name}"
   instance = "${var.instance}"
-
-  depends_on = ["google_sql_database.config-api"]
 }
 
 // kubeconfig generated using credentials provided to module.

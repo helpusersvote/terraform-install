@@ -1,6 +1,7 @@
 variable "render_dir" {
-  description = "Directory where rendered rendered should be placed"
+  description = "Directory where rendered kubeconfig should be placed. If empty, no file is rendered."
   type        = "string"
+  default     = ""
 }
 
 variable "server" {

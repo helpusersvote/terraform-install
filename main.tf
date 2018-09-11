@@ -46,24 +46,22 @@ resource "google_container_cluster" "huv_cluster" {
   }
 }
 
-// Kubernetes manifests are templated for options specific to this HUV deployment
-module "config" {
-  source = "./modules/config"
+// Component specific modules
 
-  components   = "${var.components}"
-  config       = "${path.module}/manifests/config.yaml"
-  manifest_dir = "${path.module}/manifests"
-  render_dir   = "${var.render_dir}/manifests"
-}
+// config-api
+module "config-api-gcp" {
+  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp"
 
-// kubernetes allows syncing manifests to the Kubernetes API server.
-module "kubernetes" {
-  source = "./modules/kubernetes"
+  gcloud_creds    = "${var.gcloud_creds}"
+  cluster_project = "${var.cluster_project}"
+  cluster_zone    = "${var.cluster_zone}"
 
-  manifest_dirs = "${module.config.dirs}"
-  kubeconfig    = "${module.kubeconfig.path}"
+  sql_service_account_email = "${module.cloudsql.sql_service_account_email}"
+  sql_connection_name       = "${module.cloudsql.connection_name}"
+  sql_instance_id           = "${module.cloudsql.instance_id}"
+  sql_db_password           = "${var.sql_db_password}"
 
-  last_resource = "${module.cloudsql_db.sql_access_key}"
+  kubeconfig = "${module.kubeconfig.path}"
 }
 
 // generate kubeconfig to authenticate with Kubernete API server
@@ -92,19 +90,4 @@ module "cloudsql" {
 
   client_service_account = "${var.sql_service_account_id}"
   db_instance            = "helpusersvote-${random_string.sql_instance_id.result}"
-}
-
-// cloudsql_db creates a user, database, and access credentials on a PostgreSQL instance.
-module "cloudsql_db" {
-  source = "./modules/cloudsql_db"
-
-  render_dir = "${var.render_dir}/manifests/embed-config-api"
-
-  client_service_account_email = "${module.cloudsql.sql_service_account_email}"
-  connection_name              = "${module.cloudsql.connection_name}"
-  instance                     = "${module.cloudsql.instance_id}"
-
-  db_user          = "huv_user"
-  db_user_password = "${var.sql_db_password}"
-  db_name          = "huv_db"
 }
