@@ -98,11 +98,13 @@ module "cloudsql" {
 module "cloudsql_db" {
   source = "./modules/cloudsql_db"
 
-  render_dir                   = "${var.render_dir}/manifests/embed-config-api"
+  render_dir = "${var.render_dir}/manifests/embed-config-api"
+
   client_service_account_email = "${module.cloudsql.sql_service_account_email}"
   connection_name              = "${module.cloudsql.connection_name}"
   instance                     = "${module.cloudsql.instance_id}"
-  db_user                      = "huv_user"
-  db_user_password             = "${var.sql_db_password}"
-  db_name                      = "huv_db"
+
+  db_user          = "huv_user"
+  db_user_password = "${var.sql_db_password}"
+  db_name          = "huv_db"
 }
