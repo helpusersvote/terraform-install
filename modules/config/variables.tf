@@ -18,3 +18,9 @@ variable "render_dir" {
   description = "Directiory to output templated manifests"
   type        = "string"
 }
+
+variable "vars" {
+  description = "Additional variables to use in templates"
+  type        = "map"
+  default     = {}
+}

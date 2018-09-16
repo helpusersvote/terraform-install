@@ -26,5 +26,5 @@ resource "template_dir" "kube_manifests" {
   source_dir      = "${var.manifest_dir}/${element(var.components, count.index)}"
   destination_dir = "${var.render_dir}/${element(var.components, count.index)}"
 
-  vars = "${data.external.config.*.result[count.index]}"
+  vars = "${merge(data.external.config.*.result[count.index], var.vars)}"
 }
