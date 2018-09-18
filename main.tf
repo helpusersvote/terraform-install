@@ -71,6 +71,13 @@ module "redis" {
   kubeconfig = "${module.kubeconfig.path}"
 }
 
+// Help Users Vote APIs
+module "huv_apis" {
+  source = "git::https://github.com/helpusersvote/apis.git//terraform"
+
+  kubeconfig = "${module.kubeconfig.path}"
+}
+
 // generate kubeconfig to authenticate with Kubernete API server
 module "kubeconfig" {
   source = "./modules/kubeconfig"
