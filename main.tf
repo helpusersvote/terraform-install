@@ -64,6 +64,13 @@ module "config-api-gcp" {
   kubeconfig = "${module.kubeconfig.path}"
 }
 
+// redis stores analytics data about registrations
+module "redis" {
+  source = "./modules/redis"
+
+  kubeconfig = "${module.kubeconfig.path}"
+}
+
 // generate kubeconfig to authenticate with Kubernete API server
 module "kubeconfig" {
   source = "./modules/kubeconfig"
