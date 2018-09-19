@@ -50,7 +50,7 @@ resource "google_container_cluster" "huv_cluster" {
 
 // config-api
 module "config-api-gcp" {
-  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp"
+  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=v0.0.1"
 
   gcloud_creds    = "${var.gcloud_creds}"
   cluster_project = "${var.cluster_project}"
@@ -73,7 +73,7 @@ module "redis" {
 
 // Help Users Vote APIs
 module "huv_apis" {
-  source = "git::https://github.com/helpusersvote/apis.git//terraform"
+  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=v0.0.1"
 
   kubeconfig = "${module.kubeconfig.path}"
 }
