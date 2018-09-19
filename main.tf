@@ -24,6 +24,12 @@ provider "random" {
   version = "~> 2.0"
 }
 
+// Ensure that required APIs are enabled.
+resource "google_project_service" "kubernetes" {
+  service            = "container.googleapis.com"
+  disable_on_destroy = "false"
+}
+
 // huv_cluster is GKE cluster for use with Help Users Vote.
 resource "google_container_cluster" "huv_cluster" {
   name = "${var.cluster_name}"
@@ -44,6 +50,8 @@ resource "google_container_cluster" "huv_cluster" {
       "https://www.googleapis.com/auth/monitoring",
     ]
   }
+
+  depends_on = ["google_project_service.kubernetes"]
 }
 
 // Component specific modules
