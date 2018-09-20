@@ -8,8 +8,9 @@ function main() {
 	PATH="${PATH}:${GOPATH}/bin"
 	hash ${cmd} 2>&- || { echo >&2 "${cmd} not in PATH."; exit 2; }
 
+	local diffRef="${1}"
 	local badFiles=()
-	for f in `git diff --cached --name-only --diff-filter=ACM | grep '\.tf$'`; do
+	for f in `git diff --cached --name-only --diff-filter=ACM ${diffRef} | grep '\.tf$'`; do
 		git cat-file -p :${f} | ${cmd} | diff -u <(git cat-file -p :${f}) - >/dev/null
 		if [ $? -ne 0 ]; then
 			badFiles+=(${f})
