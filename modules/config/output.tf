@@ -5,5 +5,5 @@ output "manifest_state" {
 
 output "dirs" {
   description = "Directories which were templated into"
-  value       = ["${template_dir.kube_manifests.*.destination_dir}"]
+  value       = "${local.output_dirs}"
 }
