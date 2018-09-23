@@ -28,7 +28,12 @@ resource "null_resource" "objects" {
   provisioner "local-exec" {
     when       = "destroy"
     on_failure = "continue"
-    command    = "${path.module}/scripts/manifests.sh destroy ${element(var.manifest_dirs, count.index)}"
+
+    command = <<EOF
+	if [ "${var.do_destroy}" == "1" ]; then
+		${path.module}/scripts/manifests.sh destroy ${element(var.manifest_dirs, count.index)}
+        fi
+EOF
 
     environment {
       KUBECONFIG = "${var.kubeconfig}"

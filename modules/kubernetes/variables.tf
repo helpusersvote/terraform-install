@@ -13,3 +13,8 @@ variable "last_resource" {
   type        = "string"
   default     = ""
 }
+
+variable "do_destroy" {
+  description = "Actually destroy manifests, otherwise will skip"
+  default     = false
+}
