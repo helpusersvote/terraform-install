@@ -28,5 +28,6 @@ module "kubernetes" {
 
   manifest_dirs = "${module.config.dirs}"
   kubeconfig    = "${var.kubeconfig}"
+  do_destroy    = "${var.do_destroy}"
   last_resource = "${join(",", module.config.manifest_state)}"
 }

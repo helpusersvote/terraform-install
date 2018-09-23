@@ -6,9 +6,10 @@ export PATH := ./bin:$(PATH)
 
 deploy:
 	terraform apply -auto-approve
+	terraform apply -auto-approve
 
 destroy:
-	terraform destroy -auto-approve
+	terraform destroy -auto-approve -var 'do_destroy=true'
 
 check:
 	terraform init
