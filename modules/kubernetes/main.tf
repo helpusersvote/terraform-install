@@ -13,7 +13,8 @@ resource "null_resource" "objects" {
   count = "${length(var.manifest_dirs)}"
 
   triggers {
-    dir_hash = "${data.external.dir_hash.*.result.hash[count.index]}"
+    timestamp = "${timestamp()}"
+    dir_hash  = "${data.external.dir_hash.*.result.hash[count.index]}"
   }
 
   provisioner "local-exec" {
