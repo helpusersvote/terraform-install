@@ -79,6 +79,13 @@ module "redis" {
   kubeconfig = "${module.kubeconfig.path}"
 }
 
+// collect and store metrics about running services
+module "prometheus" {
+  source = "./modules/prometheus"
+
+  kubeconfig = "${module.kubeconfig.path}"
+}
+
 // Help Users Vote APIs
 module "huv_apis" {
   source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=v0.0.3"
