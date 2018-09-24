@@ -99,6 +99,7 @@ module "huv_apis" {
   source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=v0.0.8"
 
   kubeconfig = "${module.kubeconfig.path}"
+  domain     = "${var.domain}"
 }
 
 // generate kubeconfig to authenticate with Kubernete API server
