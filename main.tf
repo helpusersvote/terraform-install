@@ -88,7 +88,7 @@ module "prometheus" {
 
 // Help Users Vote APIs
 module "huv_apis" {
-  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=v0.0.3"
+  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=v0.0.7"
 
   kubeconfig = "${module.kubeconfig.path}"
 }
