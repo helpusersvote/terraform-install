@@ -21,7 +21,7 @@ module "config" {
 module "kubernetes" {
   source = "../kubernetes"
 
-  manifest_dirs = "${concat(module.config.dirs, [var.certs])}"
+  manifest_dirs = "${concat(module.config.dirs, var.certs)}"
   kubeconfig    = "${var.kubeconfig}"
   do_destroy    = "${var.do_destroy}"
   last_resource = "${join(",", module.config.manifest_state)}"
