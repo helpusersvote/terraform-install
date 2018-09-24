@@ -12,7 +12,7 @@ locals {
 module "config" {
   source = "../config"
 
-  components   = ["argo-tunnel"]
+  components   = ["ingress"]
   render_dir   = "${local.render_dir}"
   config       = "${local.config_path}"
   manifest_dir = "${local.manifests_dir}"
