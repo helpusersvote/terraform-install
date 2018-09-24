@@ -58,7 +58,7 @@ resource "google_container_cluster" "huv_cluster" {
 
 // config-api
 module "config-api-gcp" {
-  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=50dbceb88e64fdd939d889742bae63ecdcd73b6c"
+  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=5eea35d8279940e281d17e134c54419ba23d988d"
 
   gcloud_creds    = "${var.gcloud_creds}"
   cluster_project = "${var.cluster_project}"
