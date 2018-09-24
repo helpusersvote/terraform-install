@@ -96,7 +96,7 @@ module "prometheus" {
 
 // Help Users Vote APIs
 module "huv_apis" {
-  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=v0.0.8"
+  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=0149cc9a1ae12e4115f8b251a51865cbabd5277c"
 
   kubeconfig = "${module.kubeconfig.path}"
   domain     = "${var.domain}"
