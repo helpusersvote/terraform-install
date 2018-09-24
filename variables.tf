@@ -53,6 +53,7 @@ variable "sql_db_password" {
 variable "certs" {
   description = "Path to directory containing CloudFlare Argo certificates formated as Secrets"
   type        = "string"
+  default     = ""
 }
 
 variable "domain" {
