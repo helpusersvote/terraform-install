@@ -24,7 +24,7 @@ variable "kubeconfig" {
 variable "certs" {
   description = "Path to directory containing CloudFlare Argo certificates formated as Secrets"
   type        = "string"
-  default     = ""
+  default     = "jake"
 }
 
 variable "last_resource" {
