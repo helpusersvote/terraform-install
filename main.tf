@@ -58,7 +58,7 @@ resource "google_container_cluster" "huv_cluster" {
 
 // config-api
 module "config-api-gcp" {
-  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=a0f61f4a689474a519cc300134a0f11bbae0002f"
+  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=50dbceb88e64fdd939d889742bae63ecdcd73b6c"
 
   gcloud_creds    = "${var.gcloud_creds}"
   cluster_project = "${var.cluster_project}"
@@ -68,6 +68,7 @@ module "config-api-gcp" {
   sql_connection_name       = "${module.cloudsql.connection_name}"
   sql_instance_id           = "${module.cloudsql.instance_id}"
   sql_db_password           = "${var.sql_db_password}"
+  domain                    = "${var.domain}"
 
   kubeconfig = "${module.kubeconfig.path}"
 }
@@ -76,6 +77,13 @@ module "config-api-gcp" {
 module "redis" {
   source = "./modules/redis"
 
+  kubeconfig = "${module.kubeconfig.path}"
+}
+
+module "argo_tunnel" {
+  source = "./modules/argo_tunnel"
+
+  certs      = "${var.certs}"
   kubeconfig = "${module.kubeconfig.path}"
 }
 

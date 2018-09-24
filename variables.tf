@@ -50,6 +50,17 @@ variable "sql_db_password" {
   default     = "changeme"
 }
 
+variable "certs" {
+  description = "Path to directory containing CloudFlare Argo certificates formated as Secrets"
+  type        = "string"
+}
+
+variable "domain" {
+  description = "Domain which is used in configuring ingresses"
+  type        = "string"
+  default     = "staging.helpusersvote.com"
+}
+
 variable "do_destroy" {
   description = "Actually destroy manifests, otherwise will skip"
   default     = false
