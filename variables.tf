@@ -77,7 +77,7 @@ variable "google_api_key" {
 variable "initial_node_count" {
   description = "Initial count of nodes for Google Kubernetes cluster"
   type        = "string"
-  default     = 1
+  default     = 2
 }
 
 variable "events_api_read_key" {
@@ -88,6 +88,12 @@ variable "events_api_read_key" {
 
 variable "redis_disk_size" {
   description = "Size (in GB) of the disk created for Redis"
+  type        = "string"
+  default     = "250"
+}
+
+variable "prometheus_disk_size" {
+  description = "Size (in GB) of the disk created for Prometheus"
   type        = "string"
   default     = "250"
 }

@@ -33,6 +33,30 @@ variable "image_tag" {
   default     = "v0.20.0"
 }
 
+variable "disk_size" {
+  description = "Size of disk to be attached. Kubernetes storage units should be used."
+  type        = "string"
+  default     = "200Gi"
+}
+
+variable "disk_label" {
+  description = "Label selector used to specify PersistentVolume to use."
+  type        = "string"
+  default     = ""
+}
+
+variable "disk_config" {
+  description = "Provider specific configuration which is appended to the defintion of a volume"
+  type        = "string"
+  default     = "emptyDir: {}"
+}
+
+variable "storage_class" {
+  description = "Used to determine auto-provisioning, empty string disables"
+  type        = "string"
+  default     = ""
+}
+
 variable "last_resource" {
   description = "Allows dependency to be expressed to module"
   type        = "string"

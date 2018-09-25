@@ -109,11 +109,33 @@ module "argo_tunnel" {
   kubeconfig = "${module.kubeconfig.path}"
 }
 
+// create disk to provide Prometheus persistence
+resource "google_compute_disk" "prometheus" {
+  name  = "${var.cluster_name}-prometheus-data"
+  size  = "${var.prometheus_disk_size}"
+  type  = "pd-ssd"
+  zone  = "${var.cluster_zone}-a"
+  image = ""
+
+  labels {
+    environment = "${var.cluster_name}"
+  }
+}
+
 // collect and store metrics about running services
 module "prometheus" {
   source = "./modules/prometheus"
 
   kubeconfig = "${module.kubeconfig.path}"
+
+  disk_size  = "${google_compute_disk.prometheus.size}G"
+  disk_label = "${google_compute_disk.prometheus.name}"
+
+  disk_config = <<EOF
+gcePersistentDisk:
+  pdName: ${google_compute_disk.prometheus.name}
+  fsType: ext4
+EOF
 }
 
 // Help Users Vote APIs
