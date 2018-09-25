@@ -17,9 +17,6 @@ spec:
         role: master
         app: redis
     spec:
-      volumes:
-      - name: redis-data
-        emptyDir: {}
       securityContext:
         fsGroup: 1001
         runAsUser: 1001
@@ -65,5 +62,17 @@ spec:
         volumeMounts:
         - name: redis-data
           mountPath: /bitnami/redis/data
-  updateStrategy:
-    type: OnDelete
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      storageClassName: "" # Disables auto-provision
+      volumeName: redis-data
+      accessModes:
+      - ReadWriteOnce
+      selector:
+        matchLabels:
+          data: "redis"
+      resources:
+        requests:
+          storage: 200Gi
