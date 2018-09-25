@@ -33,6 +33,18 @@ variable "image_tag" {
   default     = "4.0.10-debian-9"
 }
 
+variable "disk_size" {
+  description = "Size of disk to be attached. Kubernetes storage units should be used."
+  type        = "string"
+  default     = "200Gi"
+}
+
+variable "disk_label" {
+  description = "Label selector used to specify PersistentVolume to use."
+  type        = "string"
+  default     = ""
+}
+
 variable "last_resource" {
   description = "Allows dependency to be expressed to module"
   type        = "string"
