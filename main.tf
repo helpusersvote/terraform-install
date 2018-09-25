@@ -58,7 +58,7 @@ resource "google_container_cluster" "huv_cluster" {
 
 // config-api
 module "config-api-gcp" {
-  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=5eea35d8279940e281d17e134c54419ba23d988d"
+  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=40340b43b60d3c8ddd3042d91da978d3c8d22154"
 
   gcloud_creds    = "${var.gcloud_creds}"
   cluster_project = "${var.cluster_project}"
@@ -96,7 +96,7 @@ module "prometheus" {
 
 // Help Users Vote APIs
 module "huv_apis" {
-  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=0149cc9a1ae12e4115f8b251a51865cbabd5277c"
+  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=a8b76063a96e203a58a811e71a8aee909b9c54fd"
 
   kubeconfig = "${module.kubeconfig.path}"
   domain     = "${var.domain}"
