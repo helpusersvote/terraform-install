@@ -10,3 +10,13 @@ spec:
   resources:
     requests:
       memory: 400Mi
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: "${storage_class}"
+        accessModes:
+        - ReadWriteOnce
+        volumeName: "${disk_label==""? _name : disk_label}"
+        resources:
+          requests:
+            storage: ${disk_size}
