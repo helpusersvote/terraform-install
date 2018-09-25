@@ -96,10 +96,11 @@ module "prometheus" {
 
 // Help Users Vote APIs
 module "huv_apis" {
-  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=8ce0e201aae08b538a5e31b843108d2b5bee128f"
+  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=8e13b9fc8b19a4c9141789c9ff5980535790f7a1"
 
-  kubeconfig = "${module.kubeconfig.path}"
-  domain     = "${var.domain}"
+  kubeconfig     = "${module.kubeconfig.path}"
+  domain         = "${var.domain}"
+  google_api_key = "${var.google_api_key}"
 }
 
 // generate kubeconfig to authenticate with Kubernete API server
