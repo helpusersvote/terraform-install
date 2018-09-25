@@ -20,8 +20,11 @@ module "config" {
   vars = {
     image_repo = "${var.image_repo}"
     image_tag  = "${var.image_tag}"
-    size       = "${var.disk_size}"
-    disk_label = "${var.disk_label}"
+
+    disk_size     = "${var.disk_size}"
+    disk_label    = "${var.disk_label}"
+    disk_config   = "${indent(2, var.disk_config)}"
+    storage_class = "${var.storage_class}"
   }
 }
 

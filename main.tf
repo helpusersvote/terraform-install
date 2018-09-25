@@ -73,11 +73,33 @@ module "config-api-gcp" {
   kubeconfig = "${module.kubeconfig.path}"
 }
 
+// create disk to provide redis persistence
+resource "google_compute_disk" "redis" {
+  name  = "${var.cluster_name}-redis-data"
+  size  = "${var.redis_disk_size}"
+  type  = "pd-ssd"
+  zone  = "${var.cluster_zone}-a"
+  image = ""
+
+  labels {
+    environment = "${var.cluster_name}"
+  }
+}
+
 // redis stores analytics data about registrations
 module "redis" {
   source = "./modules/redis"
 
   kubeconfig = "${module.kubeconfig.path}"
+
+  disk_size  = "${google_compute_disk.redis.size}G"
+  disk_label = "${google_compute_disk.redis.name}"
+
+  disk_config = <<EOF
+gcePersistentDisk:
+  pdName: ${google_compute_disk.redis.name}
+  fsType: ext4
+EOF
 }
 
 module "argo_tunnel" {
