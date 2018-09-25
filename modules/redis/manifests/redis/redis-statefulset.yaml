@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: huv-redis-master
+  name: ${_name}-master
   labels:
     app: redis
 spec:
@@ -66,13 +66,10 @@ spec:
   - metadata:
       name: redis-data
     spec:
-      storageClassName: "" # Disables auto-provision
-      volumeName: ${_name}-data
+      storageClassName: "${storage_class}"
       accessModes:
       - ReadWriteOnce
-      selector:
-        matchLabels:
-          data: "${disk_label==""? _name : disk_label}"
+      volumeName: "${disk_label==""? _name : disk_label}"
       resources:
         requests:
-          storage: ${size}
+          storage: ${disk_size}

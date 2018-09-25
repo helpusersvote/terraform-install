@@ -86,6 +86,12 @@ variable "events_api_read_key" {
   default     = ""
 }
 
+variable "redis_disk_size" {
+  description = "Size (in GB) of the disk created for Redis"
+  type        = "string"
+  default     = "250"
+}
+
 variable "do_destroy" {
   description = "Actually destroy manifests, otherwise will skip"
   default     = false

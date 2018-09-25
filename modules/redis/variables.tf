@@ -45,6 +45,18 @@ variable "disk_label" {
   default     = ""
 }
 
+variable "disk_config" {
+  description = "Provider specific configuration which is appended to the defintion of a volume"
+  type        = "string"
+  default     = "emptyDir: {}"
+}
+
+variable "storage_class" {
+  description = "Used to determine auto-provisioning, empty string disables"
+  type        = "string"
+  default     = ""
+}
+
 variable "last_resource" {
   description = "Allows dependency to be expressed to module"
   type        = "string"

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: "redis"
+  labels:
+    vol-id: "redis"
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 200Gi
+  accessModes:
+    - ReadWriteOnce
+  emptyDir: {}
