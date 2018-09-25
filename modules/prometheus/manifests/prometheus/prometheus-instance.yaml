@@ -6,7 +6,7 @@ spec:
   serviceAccountName: prometheus
   serviceMonitorSelector:
     matchLabels:
-      funk-component: ingress
+      um-component: prometheus
   resources:
     requests:
       memory: 400Mi
