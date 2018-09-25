@@ -80,6 +80,12 @@ variable "initial_node_count" {
   default     = 1
 }
 
+variable "events_api_read_key" {
+  description = "Events API read key for the Dashboard"
+  type        = "string"
+  default     = ""
+}
+
 variable "do_destroy" {
   description = "Actually destroy manifests, otherwise will skip"
   default     = false
