@@ -74,6 +74,12 @@ variable "google_api_key" {
   default     = ""
 }
 
+variable "initial_node_count" {
+  description = "Initial count of nodes for Google Kubernetes cluster"
+  type        = "string"
+  default     = 1
+}
+
 variable "do_destroy" {
   description = "Actually destroy manifests, otherwise will skip"
   default     = false

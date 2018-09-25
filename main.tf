@@ -35,7 +35,7 @@ resource "google_container_cluster" "huv_cluster" {
   name = "${var.cluster_name}"
   zone = "${var.cluster_zone}"
 
-  initial_node_count = 1
+  initial_node_count = "${var.initial_node_count}"
 
   master_auth {
     username = "${var.cluster_username}"
