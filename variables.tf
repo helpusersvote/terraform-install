@@ -50,6 +50,12 @@ variable "sql_db_password" {
   default     = "changeme"
 }
 
+variable "sql_db_tier" {
+  description = "Tier of the Cloud SQL instance"
+  type        = "string"
+  default     = "db-f1-micro"
+}
+
 variable "certs" {
   description = "Path to directory containing CloudFlare Argo certificates formated as Secrets"
   type        = "string"

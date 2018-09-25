@@ -39,7 +39,7 @@ resource "google_sql_database_instance" "master" {
   region           = "us-central1"
 
   settings {
-    tier = "db-f1-micro"
+    tier = "${var.db_tier}"
   }
 
   depends_on = [
