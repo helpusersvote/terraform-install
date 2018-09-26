@@ -60,7 +60,8 @@ resource "google_container_cluster" "huv_cluster" {
     "${local.zone3}",
   ]
 
-  network = "projects/${var.cluster_project}/global/networks/default"
+  network            = "projects/${var.cluster_project}/global/networks/default"
+  min_master_version = "1.10.7-gke.2"
 
   master_auth {
     username = "${var.cluster_username}"
@@ -91,6 +92,7 @@ resource "google_container_node_pool" "primary" {
   cluster = "${google_container_cluster.huv_cluster.name}"
 
   initial_node_count = 2
+  version            = "1.10.7-gke.2"
 
   autoscaling {
     min_node_count = 2
