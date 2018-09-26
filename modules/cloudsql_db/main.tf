@@ -9,6 +9,8 @@ resource "google_sql_user" "config-api" {
 }
 
 resource "google_sql_database" "config-api" {
+  count = "${var.db_name=="" ? 0 : 1}"
+
   name     = "${var.db_name}"
   instance = "${var.instance}"
 }
