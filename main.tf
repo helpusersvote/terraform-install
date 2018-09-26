@@ -228,6 +228,7 @@ module "cloudsql" {
   source = "./modules/cloudsql"
 
   client_service_account = "${var.sql_service_account_id}"
+  db_region              = "${var.cluster_region}"
   db_tier                = "${var.sql_db_tier}"
-  db_instance            = "helpusersvote-${random_string.sql_instance_id.result}"
+  db_instance            = "${var.cluster_name}-${random_string.sql_instance_id.result}"
 }

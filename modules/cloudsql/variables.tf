@@ -13,3 +13,8 @@ variable "db_tier" {
   type        = "string"
   default     = "db-f1-micro"
 }
+
+variable "db_region" {
+  description = "Region where database should be created"
+  type        = "string"
+}
