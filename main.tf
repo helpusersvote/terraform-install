@@ -6,7 +6,7 @@ provider "google" {
 
   credentials = "${var.gcloud_creds}"
   project     = "${var.cluster_project}"
-  region      = "${var.cluster_zone}"
+  region      = "${var.cluster_region}"
 }
 
 // local provider writes and reads files from disk
@@ -30,28 +30,76 @@ resource "google_project_service" "kubernetes" {
   disable_on_destroy = "false"
 }
 
-// huv_cluster is GKE cluster for use with Help Users Vote.
-resource "google_container_cluster" "huv_cluster" {
-  name = "${var.cluster_name}"
-  zone = "${var.cluster_zone}"
+// Get list of zones for the region
+data "google_compute_zones" "available" {}
 
-  initial_node_count = "${var.initial_node_count}"
+// pool configuration
+locals {
+  zone1 = "${element(data.google_compute_zones.available.names, 0)}"
+  zone2 = "${element(data.google_compute_zones.available.names, 1)}"
+  zone3 = "${element(data.google_compute_zones.available.names, 2)}"
+
+  oauth_scopes = [
+    "https://www.googleapis.com/auth/compute",
+    "https://www.googleapis.com/auth/devstorage.read_only",
+    "https://www.googleapis.com/auth/logging.write",
+    "https://www.googleapis.com/auth/monitoring",
+  ]
+}
+
+// huv_cluster is regional GKE cluster for use with Help Users Vote.
+resource "google_container_cluster" "huv_cluster" {
+  name        = "${var.cluster_name}"
+  description = "Hosts workloads related to Help Users Vote."
+
+  region = "${var.cluster_region}"
+
+  additional_zones = [
+    "${local.zone1}",
+    "${local.zone2}",
+    "${local.zone3}",
+  ]
+
+  network = "projects/${var.cluster_project}/global/networks/default"
 
   master_auth {
     username = "${var.cluster_username}"
     password = "${var.cluster_password}"
   }
 
-  node_config {
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/compute",
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring",
-    ]
+  lifecycle {
+    ignore_changes = ["node_pool"]
+  }
+
+  timeouts {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
+  }
+
+  node_pool {
+    name = "default-pool"
   }
 
   depends_on = ["google_project_service.kubernetes"]
+}
+
+// create cluster nodes
+resource "google_container_node_pool" "primary" {
+  name    = "${var.cluster_name}-primary"
+  region  = "${var.cluster_region}"
+  cluster = "${google_container_cluster.huv_cluster.name}"
+
+  initial_node_count = 2
+
+  autoscaling {
+    min_node_count = 2
+    max_node_count = 2
+  }
+
+  node_config {
+    oauth_scopes = "${local.oauth_scopes}"
+  }
 }
 
 // Component specific modules
@@ -62,7 +110,7 @@ module "config-api-gcp" {
 
   gcloud_creds    = "${var.gcloud_creds}"
   cluster_project = "${var.cluster_project}"
-  cluster_zone    = "${var.cluster_zone}"
+  cluster_zone    = "${var.cluster_region}"
 
   sql_service_account_email = "${module.cloudsql.sql_service_account_email}"
   sql_connection_name       = "${module.cloudsql.connection_name}"
@@ -78,7 +126,7 @@ resource "google_compute_disk" "redis" {
   name  = "${var.cluster_name}-redis-data"
   size  = "${var.redis_disk_size}"
   type  = "pd-ssd"
-  zone  = "${var.cluster_zone}-a"
+  zone  = "${local.zone1}"
   image = ""
 
   labels {
@@ -114,7 +162,7 @@ resource "google_compute_disk" "prometheus" {
   name  = "${var.cluster_name}-prometheus-data"
   size  = "${var.prometheus_disk_size}"
   type  = "pd-ssd"
-  zone  = "${var.cluster_zone}-a"
+  zone  = "${local.zone1}"
   image = ""
 
   labels {
@@ -148,13 +196,18 @@ module "huv_apis" {
   events_api_read_key = "${var.events_api_read_key}"
 }
 
+// ensure node_pool is ready
+locals {
+  nodes_ready = "${google_container_node_pool.primary.name=="" ? "" : ""}"
+}
+
 // generate kubeconfig to authenticate with Kubernete API server
 module "kubeconfig" {
   source = "./modules/kubeconfig"
 
   render_dir = "${var.render_dir}"
 
-  server             = "https://${google_container_cluster.huv_cluster.endpoint}"
+  server             = "https://${google_container_cluster.huv_cluster.endpoint}${local.nodes_ready}"
   username           = "${google_container_cluster.huv_cluster.master_auth.0.username}"
   password           = "${google_container_cluster.huv_cluster.master_auth.0.password}"
   client_certificate = "${google_container_cluster.huv_cluster.master_auth.0.client_certificate}"
