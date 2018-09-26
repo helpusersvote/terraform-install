@@ -36,7 +36,6 @@ resource "google_project_iam_member" "sql_access_rights" {
 resource "google_sql_database_instance" "master" {
   name             = "${var.db_instance}"
   database_version = "POSTGRES_9_6"
-  region           = "us-central1"
 
   settings {
     tier = "${var.db_tier}"
