@@ -15,8 +15,9 @@ variable "db_user" {
 }
 
 variable "db_name" {
-  description = "Name of the database"
+  description = "Name of the database. If empty, no database is created."
   type        = "string"
+  default     = ""
 }
 
 variable "instance" {
