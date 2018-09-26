@@ -15,8 +15,8 @@ variable "cluster_project" {
   type        = "string"
 }
 
-variable "cluster_zone" {
-  description = "Gcloud zone to deploy cluster in."
+variable "cluster_region" {
+  description = "Gcloud region to deploy cluster in."
   type        = "string"
   default     = "us-west1"
 }
