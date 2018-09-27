@@ -25,7 +25,7 @@ spec:
         name: argo-tunnel
         command: ["argot"]
         args:
-        - --v=2
+        - --v=6
         - --ingressClass=argo-tunnel
         - --namespace=$(POD_NAMESPACE)
         env:
