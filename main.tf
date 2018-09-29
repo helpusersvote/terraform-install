@@ -190,7 +190,7 @@ EOF
 
 // Help Users Vote APIs
 module "huv_apis" {
-  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=dcc87407c98ef7fffabea9673180df321a9726d0"
+  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=800a2d49f367f2ea3e9616de7ec49e088134cebd"
 
   kubeconfig          = "${module.kubeconfig.path}"
   domain              = "${var.domain}"
