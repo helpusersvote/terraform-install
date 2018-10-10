@@ -108,7 +108,7 @@ resource "google_container_node_pool" "primary" {
 
 // config-api
 module "config-api-gcp" {
-  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=026f5396aabd310598f5f7ed09ace51ee134f3f8"
+  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=39cea503ce8b31064a8d6c0696e689e37072cb88"
 
   gcloud_creds    = "${var.gcloud_creds}"
   cluster_project = "${var.cluster_project}"
@@ -190,7 +190,7 @@ EOF
 
 // Help Users Vote APIs
 module "huv_apis" {
-  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=800a2d49f367f2ea3e9616de7ec49e088134cebd"
+  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=146a70e98c2fedf5b80f828bdf8e3e2255727b7c"
 
   kubeconfig          = "${module.kubeconfig.path}"
   domain              = "${var.domain}"
