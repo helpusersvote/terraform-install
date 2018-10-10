@@ -152,8 +152,9 @@ gcePersistentDisk:
 EOF
 }
 
-module "argo_tunnel" {
-  source = "./modules/argo_tunnel"
+# Contour is an Evoy powered Ingress operator
+module "contour" {
+  source = "./modules/contour"
 
   certs      = "${var.certs}"
   kubeconfig = "${module.kubeconfig.path}"
