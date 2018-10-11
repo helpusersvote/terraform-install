@@ -61,7 +61,7 @@ resource "google_container_cluster" "huv_cluster" {
   ]
 
   network            = "projects/${var.cluster_project}/global/networks/default"
-  min_master_version = "1.10.7-gke.2"
+  min_master_version = "1.10.7-gke.6"
 
   master_auth {
     username = "${var.cluster_username}"
@@ -92,7 +92,7 @@ resource "google_container_node_pool" "primary" {
   cluster = "${google_container_cluster.huv_cluster.name}"
 
   initial_node_count = 2
-  version            = "1.10.7-gke.2"
+  version            = "1.10.7-gke.6"
 
   autoscaling {
     min_node_count = 2
@@ -155,6 +155,14 @@ EOF
 # Contour is an Evoy powered Ingress operator
 module "contour" {
   source = "./modules/contour"
+
+  certs      = "${var.certs}"
+  kubeconfig = "${module.kubeconfig.path}"
+}
+
+# Deprecated: eventually should be removed
+module "argo_tunnel" {
+  source = "./modules/argo_tunnel"
 
   certs      = "${var.certs}"
   kubeconfig = "${module.kubeconfig.path}"
