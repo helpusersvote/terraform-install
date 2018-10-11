@@ -14,6 +14,18 @@ variable "last_resource" {
   default     = ""
 }
 
+variable "retries" {
+  description = "Number of times to reattempt applying manifests before failing"
+  type        = "string"
+  default     = "5"
+}
+
+variable "wait" {
+  description = "Length of time (in seconds) to wait between attempts"
+  type        = "string"
+  default     = "3"
+}
+
 variable "do_destroy" {
   description = "Actually destroy manifests, otherwise will skip"
   default     = false

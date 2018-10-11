@@ -21,6 +21,9 @@ resource "null_resource" "objects" {
     command = "${path.module}/scripts/manifests.sh create ${element(var.manifest_dirs, count.index)}"
 
     environment {
+      RETRIES = "${var.retries}"
+      WAIT    = "${var.wait}"
+
       KUBECONFIG = "${var.kubeconfig}"
       LAST       = "${var.last_resource}"
     }
