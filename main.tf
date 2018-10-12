@@ -102,6 +102,12 @@ resource "google_container_node_pool" "primary" {
   node_config {
     oauth_scopes = "${local.oauth_scopes}"
   }
+
+  timeouts {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
+  }
 }
 
 // Component specific modules
