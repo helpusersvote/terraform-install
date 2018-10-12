@@ -13,10 +13,7 @@ metadata:
   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
 spec:
  ports:
- - port: 80
-   name: http
-   protocol: TCP
-   targetPort: 8080
+ # Only listen for secure connections
  - port: 443
    name: https
    protocol: TCP
