@@ -24,7 +24,7 @@ variable "kubeconfig" {
 variable "image_repo" {
   description = "Image repository for redis"
   type        = "string"
-  default     = "docker.io/bitnami/redis"
+  default     = "bitnami/redis"
 }
 
 variable "image_tag" {

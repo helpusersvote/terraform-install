@@ -3,6 +3,9 @@
 # Run kubectl configured to convert and not use API server.
 KCONVERT="kubectl --server 127.0.0.8 convert --local"
 
+# Directory to get revision of when reporting git_sha"
+GIT_DIR=${3:-""}
+
 # Reads the contents of a ConfigMap as string:string JSON map suitable for Terraform.
 function main() {
 	local filename=${1}
@@ -38,12 +41,17 @@ function read_configmap_value() {
 	local filename=${1}
 	local key=${2}
 
+	local git_hash=""
+	if [ ! -z ${GIT_DIR} ]; then
+		git_hash=$(printf "\n  git_sha: %s\n" $(git_sha))
+	fi
+
 	cat <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: temp
-data:
+data:${git_hash}
   _name: ${key}
 $(${KCONVERT} -f ${filename} -o go-template="{{range \$k, \$v := .data}}{{if eq \$k \"${key}\"}}{{\$v}}{{end}}{{end}}" | sed "s/^/  /g")
 EOF
@@ -52,6 +60,10 @@ EOF
 # Places brackets around JSON body
 function close_json() {
 	echo "{$(cat)}" | sed 's/{,/{/g'
+}
+
+function git_sha() {
+	git -C ${GIT_DIR} rev-parse HEAD 2>/dev/null
 }
 
 main "$@"
