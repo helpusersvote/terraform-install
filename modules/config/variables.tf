@@ -24,3 +24,9 @@ variable "vars" {
   type        = "map"
   default     = {}
 }
+
+variable "git_dir" {
+  description = "If provided, used for tagging images"
+  type        = "string"
+  default     = ""
+}

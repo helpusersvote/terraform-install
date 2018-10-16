@@ -23,7 +23,7 @@ spec:
       serviceAccountName: "default"
       containers:
       - name: huv-redis
-        image: "${image_repo}:${image_tag}"
+        image: "${image_digest}"
         imagePullPolicy: "Always"
         env:
         - name: REDIS_REPLICATION_MODE
