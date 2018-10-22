@@ -43,7 +43,7 @@ function read_configmap_value() {
 
 	local git_hash=""
 	if [ ! -z ${GIT_DIR} ]; then
-		git_hash=$(printf "\n  git_sha: %s\n" $(git_sha))
+		git_hash=$(printf '\n  git_sha: "%s"\n' $(git_sha))
 	fi
 
 	cat <<EOF
