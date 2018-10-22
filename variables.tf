@@ -80,6 +80,12 @@ variable "initial_node_count" {
   default     = 2
 }
 
+variable "environment" {
+  description = "String used to uniquely identify an environment"
+  type        = "string"
+  default     = ""
+}
+
 variable "events_api_read_key" {
   description = "Events API read key for the Dashboard"
   type        = "string"
