@@ -205,13 +205,15 @@ EOF
 
 // Help Users Vote APIs
 module "huv_apis" {
-  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=f90dd62ca120f9e42b6d044d132c5727c611e913"
+  source = "git::https://github.com/helpusersvote/apis.git//terraform?ref=0ee9c0bbb676aa837c2a3a5e18a7b10529dd7769"
 
   kubeconfig          = "${module.kubeconfig.path}"
   domain              = "${var.domain}"
   environment         = "${var.environment}"
   google_api_key      = "${var.google_api_key}"
   events_api_read_key = "${var.events_api_read_key}"
+  segment_write_key   = "${var.segment_write_key}"
+  sentry_dsn          = "${var.sentry_dsn}"
 }
 
 // ensure node_pool is ready

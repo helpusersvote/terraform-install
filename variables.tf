@@ -92,6 +92,18 @@ variable "events_api_read_key" {
   default     = ""
 }
 
+variable "segment_write_key" {
+  description = "Token used to write events into Segment"
+  type        = "string"
+  default     = ""
+}
+
+variable "sentry_dsn" {
+  description = "Sentry Data Source Name used for reporting events"
+  type        = "string"
+  default     = ""
+}
+
 variable "redis_disk_size" {
   description = "Size (in GB) of the disk created for Redis"
   type        = "string"
