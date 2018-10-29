@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: envoy-components
+  labels:
+    um-component: prometheus
+spec:
+  selector:
+    matchExpressions:
+    - {key: um-component, operator: Exists}
+  namespaceSelector:
+    matchNames:
+    - heptio-contour
+  endpoints:
+  - port: metrics
+    interval: 15s
+  - port: envoy-metrics
+    interval: 18s
+    path: /stats/prometheus

@@ -48,7 +48,11 @@ variable "disk_label" {
 variable "disk_config" {
   description = "Provider specific configuration which is appended to the defintion of a volume"
   type        = "string"
-  default     = "emptyDir: {}"
+
+  default = <<EOF
+hostPath:
+  path: /tmp/prom_data
+EOF
 }
 
 variable "storage_class" {
