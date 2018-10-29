@@ -39,6 +39,26 @@ resource "google_sql_database_instance" "master" {
   region           = "${var.db_region}"
 
   settings {
+    activation_policy = "ALWAYS"
+    availability_type = "REGIONAL"
+
+    backup_configuration {
+      enabled    = "true"
+      start_time = "10:00"
+    }
+
+    disk_autoresize = "true"
+    disk_size       = "10"
+    disk_type       = "PD_SSD"
+
+    maintenance_window {
+      day  = "4"
+      hour = "8"
+    }
+
+    pricing_plan     = "PER_USE"
+    replication_type = "SYNCHRONOUS"
+
     tier = "${var.db_tier}"
   }
 
