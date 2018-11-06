@@ -3,6 +3,7 @@ kind: Prometheus
 metadata:
   name: prometheus
 spec:
+  retention: 720h
   serviceAccountName: prometheus
   serviceMonitorSelector:
     matchLabels:
