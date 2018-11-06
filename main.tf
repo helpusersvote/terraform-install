@@ -114,7 +114,7 @@ resource "google_container_node_pool" "primary" {
 
 // config-api
 module "config-api-gcp" {
-  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=e4c00bcc6752f2b1e682bd20f5245f0ed8c32f64"
+  source = "git::https://github.com/usermirror/config-api.git//terraform/gcp?ref=b30c23de77313f9dfc00b3c67a5be4af79a994e7"
 
   gcloud_creds    = "${var.gcloud_creds}"
   cluster_project = "${var.cluster_project}"
